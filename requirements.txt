@@ -1,0 +1,43 @@
+# CRYPTON - Ultimate Multi-Algorithm Requirements
+# ==============================================
+# ALL packages below are REQUIRED and ACTIVE for full 43 algorithm support
+
+# ===== CORE CRYPTOGRAPHIC LIBRARIES (REQUIRED) =====
+cryptography>=41.0.0
+bcrypt>=4.0.0
+argon2-cffi>=23.0.0
+pynacl>=1.5.0
+passlib>=1.7.4
+
+# ===== USER INTERFACE (REQUIRED) =====
+colorama>=0.4.6
+
+# ===== ALGORITHM BREAKDOWN =====
+# cryptography: Fernet, AES variants, ChaCha20, RSA, ECDH, Ed25519, X25519, DSA, hashes
+# bcrypt: bcrypt password hashing
+# argon2-cffi: Argon2id, Argon2i, Argon2d
+# pynacl: Salsa20, XChaCha20, NaCl primitives  
+# passlib: SHA-512 crypt, additional password methods
+# colorama: Cross-platform terminal colors
+# Built-in Python: hashlib, base64, binascii, string (for classical ciphers)
+
+# ===== DEVELOPMENT DEPENDENCIES (OPTIONAL FOR DEVELOPERS) =====
+# These are ONLY for people who want to MODIFY/IMPROVE the CRYPTON code
+# Normal users DON'T need these - they're for:
+#
+# pytest>=7.0.0           # 🧪 TESTING: Run automated tests to verify code works
+# black>=23.0.0           # 🎨 FORMATTING: Auto-format code to look clean  
+# flake8>=6.0.0           # 🔍 LINTING: Check code quality and find bugs
+# mypy>=1.0.0             # 📝 TYPE CHECKING: Verify data types are correct
+# coverage>=7.0.0         # 📊 TEST COVERAGE: See how much code is tested
+# pre-commit>=3.0.0       # 🚀 GIT HOOKS: Auto-run checks before commits
+#
+# TO USE DEVELOPMENT TOOLS:
+# 1. Uncomment the lines above (remove #)
+# 2. Run: pip install -r requirements.txt
+# 3. Now you can contribute code improvements to CRYPTON!
+
+# ===== FOR NORMAL USERS =====
+# Just run: python main.py
+# The 6 packages above will auto-install and you'll have all 43 algorithms!
+# You DON'T need the development tools unless you want to modify CRYPTON's code.
