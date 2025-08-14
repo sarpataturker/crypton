@@ -104,7 +104,7 @@ class CRYPTON:
     def __init__(self):
         self.key = None
         self.fernet = None
-        self.version = "5.0.0"
+        self.version = "5.1.1"
         self.app_name = "CRYPTON"
         self.author = "@sarpataturker"
         self.github = "https://github.com/sarpataturker/crypton"
@@ -234,12 +234,12 @@ class CRYPTON:
 ├─────────────────────────────────────────────────────────────────────┤{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  1. {Style.BRIGHT}{Fore.LIGHTGREEN_EX}⚙️  Select Encryption Algorithm (25+ Available){Style.RESET_ALL}            {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  2. {Style.BRIGHT}{Fore.LIGHTGREEN_EX}🔑 Generate/Load Encryption Key{Style.RESET_ALL}                          {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
-{Fore.LIGHTWHITE_EX}│  3. {Style.BRIGHT}{Fore.GREEN}📁 Load Key from .env File{Style.RESET_ALL}                               {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
+{Fore.LIGHTWHITE_EX}│  3. {Style.BRIGHT}{Fore.GREEN}📁 Load Key from .env File (Auto-Detect){Style.RESET_ALL}                 {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  4. {Style.BRIGHT}{Fore.LIGHTGREEN_EX}✅ Validate Current Key{Style.RESET_ALL}                                  {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  5. {Style.BRIGHT}{Fore.YELLOW}🔒 Encrypt Text Data{Style.RESET_ALL}                                     {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  6. {Style.BRIGHT}{Fore.CYAN}🔓 Decrypt Text Data{Style.RESET_ALL}                                     {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  7. {Style.BRIGHT}{Fore.MAGENTA}📊 View All Algorithms{Style.RESET_ALL}                                   {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
-{Fore.LIGHTWHITE_EX}│  8. {Style.BRIGHT}{Fore.GREEN}💾 Save Key to .env File{Style.RESET_ALL}                               {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
+{Fore.LIGHTWHITE_EX}│  8. {Style.BRIGHT}{Fore.GREEN}💾 Save Key to .env File (Smart Organize){Style.RESET_ALL}             {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Fore.LIGHTWHITE_EX}│  9. {Style.BRIGHT}{Fore.RED}❌ Exit CRYPTON{Style.RESET_ALL}                                          {Fore.LIGHTWHITE_EX}│{Style.RESET_ALL}
 {Style.BRIGHT}{Fore.LIGHTGREEN_EX}└─────────────────────────────────────────────────────────────────────┘{Style.RESET_ALL}
         """
@@ -276,11 +276,22 @@ class CRYPTON:
             algo_count = len(self.categories[category])
             print(f"{Fore.WHITE}  {i}. {Style.BRIGHT}{Fore.LIGHTGREEN_EX}{category}{Style.RESET_ALL} ({algo_count} algorithms)")
         
+        # Add back option for categories
+        back_option = len(categories) + 1
+        print(f"{Fore.WHITE}  {back_option}. {Style.BRIGHT}{Fore.RED}🔙 Back to Main Menu{Style.RESET_ALL}")
+        
         try:
-            cat_choice = input(f"\n{Style.BRIGHT}{Fore.YELLOW}Select category (1-{len(categories)}): {Style.RESET_ALL}").strip()
-            cat_idx = int(cat_choice) - 1
+            cat_choice = input(f"\n{Style.BRIGHT}{Fore.YELLOW}Select category (1-{back_option}): {Style.RESET_ALL}").strip()
+            cat_idx = int(cat_choice)
             
-            if 0 <= cat_idx < len(categories):
+            # Check if user selected back option
+            if cat_idx == back_option:
+                self.print_info("Returning to main menu...")
+                return
+            
+            # Validate category selection
+            if 1 <= cat_idx <= len(categories):
+                cat_idx -= 1  # Convert to 0-based index
                 selected_category = categories[cat_idx]
                 algos_in_category = self.categories[selected_category]
                 
@@ -291,10 +302,21 @@ class CRYPTON:
                     desc = self.algorithms[algo]
                     print(f"{Fore.WHITE}  {i}. {Style.BRIGHT}{Fore.LIGHTGREEN_EX}{algo.upper()}{Style.RESET_ALL} - {desc}{status}")
                 
-                algo_choice = input(f"\n{Style.BRIGHT}{Fore.YELLOW}Select algorithm (1-{len(algos_in_category)}): {Style.RESET_ALL}").strip()
-                algo_idx = int(algo_choice) - 1
+                # Add back option for algorithms
+                algo_back_option = len(algos_in_category) + 1
+                print(f"{Fore.WHITE}  {algo_back_option}. {Style.BRIGHT}{Fore.RED}🔙 Back to Categories{Style.RESET_ALL}")
                 
-                if 0 <= algo_idx < len(algos_in_category):
+                algo_choice = input(f"\n{Style.BRIGHT}{Fore.YELLOW}Select algorithm (1-{algo_back_option}): {Style.RESET_ALL}").strip()
+                algo_idx = int(algo_choice)
+                
+                # Check if user selected back option
+                if algo_idx == algo_back_option:
+                    self.print_info("Returning to category selection...")
+                    return self.select_algorithm()  # Recursive call to show categories again
+                
+                # Validate algorithm selection
+                if 1 <= algo_idx <= len(algos_in_category):
+                    algo_idx -= 1  # Convert to 0-based index
                     old_algo = self.current_algorithm
                     self.current_algorithm = algos_in_category[algo_idx]
                     
@@ -310,9 +332,9 @@ class CRYPTON:
                     if old_algo != self.current_algorithm:
                         print(f"{Style.BRIGHT}{Fore.YELLOW}⚠️  Previous key cleared - generate new key for this algorithm{Style.RESET_ALL}")
                 else:
-                    self.print_error("Invalid algorithm selection!")
+                    self.print_error(f"Invalid algorithm selection! Please enter 1-{algo_back_option}")
             else:
-                self.print_error("Invalid category selection!")
+                self.print_error(f"Invalid category selection! Please enter 1-{back_option}")
                 
         except ValueError:
             self.print_error("Please enter a valid number!")
@@ -839,15 +861,299 @@ class CRYPTON:
         print(f"   {Fore.WHITE}{decrypted}{Style.RESET_ALL}")
         print(f"{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{'='*70}{Style.RESET_ALL}")
     
-    def load_key_from_env(self, env_path=".env"):
-        """Load encryption key from .env file"""
-        # Implementation similar to before but handles all algorithm types
-        return True
+    def load_key_from_env(self):
+        """Smart .env key loading - automatically finds and loads keys"""
+        env_path = ".env"
+        
+        try:
+            if not Path(env_path).exists():
+                self.print_error(f"No .env file found in current directory!")
+                create_new = input(f"{Style.BRIGHT}{Fore.YELLOW}📝 Create .env file with current algorithm key? (y/n): {Style.RESET_ALL}").lower().strip()
+                
+                if create_new in ['y', 'yes']:
+                    if not self.key:
+                        if not self.generate_key():
+                            return False
+                    return self.save_key_to_env()
+                else:
+                    self.print_info("Operation cancelled.")
+                    return False
+            
+            # Read and parse .env file
+            algorithm_keys = {}
+            current_section = None
+            
+            with open(env_path, 'r') as file:
+                for line_num, line in enumerate(file, 1):
+                    line = line.strip()
+                    
+                    # Skip empty lines and general comments
+                    if not line or line.startswith('#CRYPTON') or line.startswith('#==='):
+                        continue
+                    
+                    # Algorithm section headers
+                    if line.startswith('#') and not '=' in line:
+                        current_section = line[1:].strip().lower()
+                        continue
+                    
+                    # Key-value pairs
+                    if '=' in line and not line.startswith('#'):
+                        key_name, key_value = line.split('=', 1)
+                        key_name = key_name.strip()
+                        key_value = key_value.strip().strip('"\'')
+                        
+                        if current_section:
+                            if current_section not in algorithm_keys:
+                                algorithm_keys[current_section] = {}
+                            algorithm_keys[current_section][key_name] = key_value
+            
+            # Find matching algorithm keys
+            current_algo_lower = self.current_algorithm.lower()
+            matching_keys = []
+            
+            for section, keys in algorithm_keys.items():
+                if current_algo_lower in section or section in current_algo_lower:
+                    for key_name, key_value in keys.items():
+                        matching_keys.append((section, key_name, key_value))
+            
+            if not matching_keys:
+                self.print_error(f"No keys found for {self.current_algorithm.upper()} in .env file!")
+                add_key = input(f"{Style.BRIGHT}{Fore.YELLOW}📝 Add {self.current_algorithm.upper()} key to .env? (y/n): {Style.RESET_ALL}").lower().strip()
+                
+                if add_key in ['y', 'yes']:
+                    if not self.key:
+                        if not self.generate_key():
+                            return False
+                    return self.save_key_to_env()
+                return False
+            
+            # Display available keys
+            if len(matching_keys) == 1:
+                section, key_name, key_value = matching_keys[0]
+                self._load_key_value(key_value)
+                self.print_success(f"Loaded {self.current_algorithm.upper()} key: {key_name}")
+                return True
+            else:
+                print(f"\n{Style.BRIGHT}{Fore.GREEN}🔑 Multiple {self.current_algorithm.upper()} keys found:{Style.RESET_ALL}")
+                for i, (section, key_name, key_value) in enumerate(matching_keys, 1):
+                    print(f"{Fore.WHITE}  {i}. {Style.BRIGHT}{Fore.YELLOW}{key_name}{Style.RESET_ALL} (from #{section})")
+                
+                # Add back option
+                back_option = len(matching_keys) + 1
+                print(f"{Fore.WHITE}  {back_option}. {Style.BRIGHT}{Fore.RED}🔙 Back to Main Menu{Style.RESET_ALL}")
+                
+                choice = input(f"\n{Style.BRIGHT}{Fore.YELLOW}Select key (1-{back_option}): {Style.RESET_ALL}").strip()
+                try:
+                    choice_idx = int(choice)
+                    
+                    # Check if user selected back option
+                    if choice_idx == back_option:
+                        self.print_info("Returning to main menu...")
+                        return False
+                    
+                    # Validate key selection
+                    if 1 <= choice_idx <= len(matching_keys):
+                        choice_idx -= 1  # Convert to 0-based index
+                        section, key_name, key_value = matching_keys[choice_idx]
+                        self._load_key_value(key_value)
+                        self.print_success(f"Loaded {self.current_algorithm.upper()} key: {key_name}")
+                        return True
+                    else:
+                        self.print_error(f"Invalid selection! Please enter 1-{back_option}")
+                        return False
+                except ValueError:
+                    self.print_error("Please enter a valid number!")
+                    return False
+            
+        except Exception as e:
+            self.print_error(f"Failed to load key from .env: {e}")
+            return False
     
-    def save_key_to_env(self, env_path=".env"):
-        """Save encryption key to .env file"""
-        # Implementation similar to before but handles all algorithm types
-        return True
+    def _load_key_value(self, key_value):
+        """Load key value based on current algorithm"""
+        if self.current_algorithm == "fernet":
+            self.key = key_value.encode()
+            self.fernet = Fernet(self.key)
+        elif self.current_algorithm in ["aes_256_gcm", "aes_192_gcm", "aes_128_gcm", "aes_256_cbc", "aes_256_ctr", "aes_256_ofb", "chacha20_poly1305", "chacha20", "salsa20", "xchacha20", "threedes"]:
+            self.key = base64.b64decode(key_value.encode())
+        elif self.current_algorithm in ["rsa_2048", "rsa_4096"]:
+            # Load RSA private key from PEM format
+            private_pem = base64.b64decode(key_value.encode())
+            self.key = serialization.load_pem_private_key(private_pem, password=None, backend=default_backend())
+        elif "argon2" in self.current_algorithm or self.current_algorithm in ["bcrypt", "scrypt", "pbkdf2", "sha512_crypt"]:
+            self.key = f"{self.current_algorithm}_ready"
+        elif self.current_algorithm in ["sha256", "sha512", "sha3_256", "sha3_512", "blake2b", "blake2s", "md5", "sha1"]:
+            self.key = f"{self.current_algorithm}_ready" 
+        elif self.current_algorithm in ["base64", "base32", "hex", "rot13", "atbash"]:
+            self.key = f"{self.current_algorithm}_ready"
+        elif self.current_algorithm == "caesar":
+            self.key = int(key_value)
+        elif self.current_algorithm == "vigenere":
+            self.key = key_value
+        elif self.current_algorithm == "rail_fence":
+            self.key = int(key_value)
+        else:
+            self.key = key_value
+    
+    def save_key_to_env(self):
+        """Smart .env key saving - organized by algorithm categories"""
+        if not self.key:
+            self.print_error("No encryption key available to save!")
+            return False
+        
+        env_path = ".env"
+        
+        try:
+            # Get key name from user
+            suggested_name = f"{self.current_algorithm.upper()}_KEY"
+            key_name = input(f"{Style.BRIGHT}{Fore.YELLOW}🏷️  Enter key name (press Enter for '{suggested_name}'): {Style.RESET_ALL}").strip()
+            if not key_name:
+                key_name = suggested_name
+            
+            # Convert key to string format for storage
+            key_str = self._convert_key_to_string()
+            
+            # Read existing .env content
+            existing_content = []
+            algorithm_sections = {}
+            
+            if Path(env_path).exists():
+                with open(env_path, 'r') as file:
+                    current_section = None
+                    for line in file:
+                        line_stripped = line.rstrip()
+                        existing_content.append(line_stripped)
+                        
+                        # Track algorithm sections
+                        if line_stripped.startswith('#') and not line_stripped.startswith('#CRYPTON') and not line_stripped.startswith('#===') and not '=' in line_stripped:
+                            current_section = line_stripped[1:].strip().lower()
+                            if current_section not in algorithm_sections:
+                                algorithm_sections[current_section] = []
+                        elif current_section and '=' in line_stripped and not line_stripped.startswith('#'):
+                            algorithm_sections[current_section].append(line_stripped)
+            
+            # Determine algorithm category and section name
+            category, section_name = self._get_algorithm_category_and_section()
+            
+            # Check if we need to add to existing section or create new one
+            section_exists = False
+            for existing_section in algorithm_sections.keys():
+                if section_name.lower() in existing_section or existing_section in section_name.lower():
+                    section_exists = True
+                    break
+            
+            if not existing_content:
+                # Create new .env file
+                content = self._create_new_env_content(category, section_name, key_name, key_str)
+            else:
+                # Update existing .env file
+                content = self._update_existing_env_content(existing_content, algorithm_sections, category, section_name, key_name, key_str, section_exists)
+            
+            # Write to file
+            with open(env_path, 'w') as file:
+                file.write(content)
+            
+            self.print_success(f"Key '{key_name}' saved to .env under #{section_name.upper()} section!")
+            self.print_info(f"File location: {os.path.abspath(env_path)}")
+            return True
+            
+        except Exception as e:
+            self.print_error(f"Failed to save key to .env: {e}")
+            return False
+    
+    def _convert_key_to_string(self):
+        """Convert current key to string format for .env storage"""
+        if self.current_algorithm == "fernet":
+            return self.key.decode()
+        elif self.current_algorithm in ["aes_256_gcm", "aes_192_gcm", "aes_128_gcm", "aes_256_cbc", "aes_256_ctr", "aes_256_ofb", "chacha20_poly1305", "chacha20", "salsa20", "xchacha20", "threedes"]:
+            return base64.b64encode(self.key).decode()
+        elif self.current_algorithm in ["rsa_2048", "rsa_4096"]:
+            # Store RSA private key in PEM format (base64 encoded for .env)
+            private_pem = self.key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption()
+            )
+            return base64.b64encode(private_pem).decode()
+        elif self.current_algorithm in ["caesar", "rail_fence"]:
+            return str(self.key)
+        elif self.current_algorithm == "vigenere":
+            return self.key
+        else:
+            return str(self.key)
+    
+    def _get_algorithm_category_and_section(self):
+        """Get category and section name for current algorithm"""
+        for category, algos in self.categories.items():
+            if self.current_algorithm in algos:
+                section_name = self.current_algorithm.replace('_', '').upper()
+                return category, section_name
+        return "Unknown", self.current_algorithm.upper()
+    
+    def _create_new_env_content(self, category, section_name, key_name, key_str):
+        """Create new .env file content"""
+        content = f"""# CRYPTON v{self.version} - Encryption Keys
+# ========================================
+# Created by @sarpataturker
+# GitHub: https://github.com/sarpataturker/crypton
+# 
+# WARNING: Keep this file secure and private!
+# Do not share or commit to version control!
+# ========================================
+
+# {category.upper()} ENCRYPTION
+#{section_name}
+{key_name}={key_str}
+
+# Generated on: {self._get_timestamp()}
+# Algorithm: {self.algorithms.get(self.current_algorithm, 'Unknown')}
+"""
+        return content
+    
+    def _update_existing_env_content(self, existing_content, algorithm_sections, category, section_name, key_name, key_str, section_exists):
+        """Update existing .env file content"""
+        content_lines = existing_content.copy()
+        
+        # Find where to insert the new key
+        if section_exists:
+            # Add to existing section
+            section_found = False
+            for i, line in enumerate(content_lines):
+                if line.startswith('#') and section_name.lower() in line.lower():
+                    # Find the end of this section
+                    insert_pos = i + 1
+                    while insert_pos < len(content_lines):
+                        next_line = content_lines[insert_pos].strip()
+                        if next_line.startswith('#') and not next_line.startswith('#===') and not next_line.startswith('#CRYPTON'):
+                            break
+                        if next_line and '=' in next_line:
+                            insert_pos += 1
+                        else:
+                            break
+                    
+                    content_lines.insert(insert_pos, f"{key_name}={key_str}")
+                    section_found = True
+                    break
+            
+            if not section_found:
+                # Section not found, add at end
+                content_lines.extend([
+                    "",
+                    f"# {category.upper()} ENCRYPTION",
+                    f"#{section_name}",
+                    f"{key_name}={key_str}"
+                ])
+        else:
+            # Create new section
+            content_lines.extend([
+                "",
+                f"# {category.upper()} ENCRYPTION", 
+                f"#{section_name}",
+                f"{key_name}={key_str}",
+                f"# Added on: {self._get_timestamp()}"
+            ])
+        
+        return '\n'.join(content_lines) + '\n'
     
     def validate_key(self):
         """Validate current encryption key"""
@@ -894,12 +1200,9 @@ class CRYPTON:
                     
                 elif choice == '3':
                     print(f"\n{Style.BRIGHT}{Fore.GREEN}{'='*50}")
-                    print(f"         📁 KEY LOADING MODULE")
+                    print(f"         📁 SMART KEY LOADING MODULE")
                     print(f"{'='*50}{Style.RESET_ALL}")
-                    env_file = input(f"{Style.BRIGHT}{Fore.WHITE}📁 Enter .env file path (press Enter for '.env'): {Style.RESET_ALL}").strip()
-                    if not env_file:
-                        env_file = ".env"
-                    self.load_key_from_env(env_file)
+                    self.load_key_from_env()
                     
                 elif choice == '4':
                     print(f"\n{Style.BRIGHT}{Fore.GREEN}{'='*50}")
@@ -924,12 +1227,9 @@ class CRYPTON:
                     
                 elif choice == '8':
                     print(f"\n{Style.BRIGHT}{Fore.GREEN}{'='*50}")
-                    print(f"         💾 KEY SAVING MODULE")
+                    print(f"         💾 SMART KEY SAVING MODULE")
                     print(f"{'='*50}{Style.RESET_ALL}")
-                    env_file = input(f"{Style.BRIGHT}{Fore.WHITE}📁 Enter .env file path (press Enter for '.env'): {Style.RESET_ALL}").strip()
-                    if not env_file:
-                        env_file = ".env"
-                    self.save_key_to_env(env_file)
+                    self.save_key_to_env()
                     
                 elif choice == '9':
                     print(f"\n{Style.BRIGHT}{Fore.LIGHTGREEN_EX}{'='*80}")

@@ -1,7 +1,7 @@
 # 🔐 CRYPTON - Ultimate Multi-Algorithm Encryption Suite
 
 [![GitHub](https://img.shields.io/badge/GitHub-sarpataturker%2Fcrypton-blue?logo=github)](https://github.com/sarpataturker/crypton)
-![Version](https://img.shields.io/badge/version-5.0.0-brightgreen)
+![Version](https://img.shields.io/badge/version-5.1.1-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.6+-blue)
 ![Algorithms](https://img.shields.io/badge/algorithms-43+-orange)
 ![Categories](https://img.shields.io/badge/categories-5-purple)
@@ -366,7 +366,7 @@ https://github.com/sarpataturker/crypton
 
 <div align="center">
 
-**🔐 CRYPTON v5.0.0 - Ultimate Encryption Powerhouse 🔐**
+**🔐 CRYPTON v5.1.1 - Ultimate Encryption Powerhouse 🔐**
 
 *Created by [@sarpataturker](https://github.com/sarpataturker)*
 
