@@ -60,28 +60,56 @@ CRYPTON truly supports **43 cryptographic algorithms** across 5 categories:
 
 #### 🔒 **Symmetric Encryption: 12 Algorithms**
 1. **Fernet** (AES-128 CBC + HMAC SHA256)
-2. **AES-256 GCM**, 3. **AES-192 GCM**, 4. **AES-128 GCM**
-5. **AES-256 CBC**, 6. **AES-256 CTR**, 7. **AES-256 OFB**
-8. **ChaCha20-Poly1305**, 9. **ChaCha20**, 10. **Salsa20**, 11. **XChaCha20**
+2. **AES-256 GCM** 
+3. **AES-192 GCM** 
+4. **AES-128 GCM**
+5. **AES-256 CBC** 
+6. **AES-256 CTR** 
+7. **AES-256 OFB**
+8. **ChaCha20-Poly1305** 
+9. **ChaCha20** 
+10. **Salsa20** 
+11. **XChaCha20**
 12. **3DES** (Triple DES)
 
 #### 🔓 **Asymmetric Encryption: 8 Algorithms**
-13. **RSA-2048**, 14. **RSA-4096**
-15. **Elliptic Curve P-256**, 16. **EC P-384**, 17. **EC P-521**
-18. **Ed25519**, 19. **X25519**, 20. **DSA**
+13. **RSA-2048** 
+14. **RSA-4096**
+15. **Elliptic Curve P-256** 
+16. **EC P-384** 
+17. **EC P-521**
+18. **Ed25519** 
+19. **X25519** 
+20. **DSA**
 
 #### 🛡️ **Password Hashing: 7 Algorithms**
-21. **bcrypt**, 22. **Argon2id**, 23. **Argon2i**, 24. **Argon2d**
-25. **scrypt**, 26. **PBKDF2**, 27. **SHA-512 crypt**
+21. **bcrypt** 
+22. **Argon2id** 
+23. **Argon2i** 
+24. **Argon2d**
+25. **scrypt** 
+26. **PBKDF2** 
+27. **SHA-512 crypt**
 
 #### 📊 **Hash Functions: 8 Algorithms**
-28. **SHA-256**, 29. **SHA-512**, 30. **SHA3-256**, 31. **SHA3-512**
-32. **BLAKE2b**, 33. **BLAKE2s**, 34. **MD5**, 35. **SHA-1**
+28. **SHA-256** 
+29. **SHA-512** 
+30. **SHA3-256** 
+31. **SHA3-512**
+32. **BLAKE2b** 
+33. **BLAKE2s** 
+34. **MD5** 
+35. **SHA-1**
 
 #### 🎭 **Encoding & Classical: 8 Algorithms**
-36. **Base64**, 37. **Base32**, 38. **Hexadecimal**
-39. **ROT13**, 40. **Caesar Cipher**, 41. **Vigenère Cipher**
-42. **Atbash Cipher**, 43. **Rail Fence Cipher**
+36. **Base64** 
+37. **Base32** 
+38. **Hexadecimal**
+39. **ROT13** 
+40. **Caesar Cipher** 
+41. **Vigenère Cipher**
+42. **Atbash Cipher** 
+43. **Rail Fence Cipher**
 
 **TOTAL: 43 ALGORITHMS** ✅
 
