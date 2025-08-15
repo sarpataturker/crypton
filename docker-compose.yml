@@ -1,0 +1,251 @@
+# ===== CRYPTON Docker Compose Configuration =====
+# Multi-service setup for production deployment
+
+version: '3.8'
+
+services:
+  # ===== CRYPTON API SERVICE =====
+  crypton-api:
+    build:
+      context: .
+      target: production
+      dockerfile: Dockerfile
+    container_name: crypton-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - CRYPTON_SECRET_KEY=${CRYPTON_SECRET_KEY:-crypton-default-secret-key-change-me}
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    networks:
+      - crypton-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crypton-api.rule=Host(`api.crypton.local`)"
+      - "traefik.http.services.crypton-api.loadbalancer.server.port=8000"
+      - "com.docker.compose.service=crypton-api"
+
+  # ===== REDIS CACHE SERVICE =====
+  redis:
+    image: redis:7-alpine
+    container_name: crypton-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - crypton-network
+    command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===== NGINX REVERSE PROXY =====
+  nginx:
+    image: nginx:alpine
+    container_name: crypton-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/static:/var/www/static:ro
+    depends_on:
+      - crypton-api
+    networks:
+      - crypton-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===== PROMETHEUS MONITORING =====
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: crypton-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - crypton-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # ===== GRAFANA DASHBOARDS =====
+  grafana:
+    image: grafana/grafana:latest
+    container_name: crypton-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - crypton-network
+    depends_on:
+      - prometheus
+
+  # ===== ELASTICSEARCH (Optional) =====
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: crypton-elasticsearch
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - crypton-network
+    profiles:
+      - monitoring
+
+  # ===== KIBANA (Optional) =====
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: crypton-kibana
+    restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - crypton-network
+    depends_on:
+      - elasticsearch
+    profiles:
+      - monitoring
+
+# ===== DEVELOPMENT OVERRIDE =====
+# Use with: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+# Save this as docker-compose.dev.yml:
+# version: '3.8'
+# services:
+#   crypton-api:
+#     build:
+#       target: development
+#     volumes:
+#       - .:/app
+#     environment:
+#       - ENVIRONMENT=development
+#     command: ["python", "-m", "uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# ===== NETWORKS =====
+networks:
+  crypton-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# ===== VOLUMES =====
+volumes:
+  redis-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  elasticsearch-data:
+    driver: local
+
+# ===== USAGE INSTRUCTIONS =====
+#
+# 1. Start all services:
+#    docker-compose up -d
+#
+# 2. Start only API:
+#    docker-compose up -d crypton-api
+#
+# 3. Start with monitoring:
+#    docker-compose --profile monitoring up -d
+#
+# 4. Development mode:
+#    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# 5. View logs:
+#    docker-compose logs -f crypton-api
+#
+# 6. Scale API:
+#    docker-compose up -d --scale crypton-api=3
+#
+# 7. Stop all services:
+#    docker-compose down
+#
+# 8. Clean up (remove volumes):
+#    docker-compose down -v
+#
+# 9. Rebuild and start:
+#    docker-compose up --build -d
+#
+# 10. Monitor resources:
+#     docker-compose top
+
+# ===== ACCESS POINTS =====
+#
+# 🌐 CRYPTON API: http://localhost:8000
+# 📖 API Docs: http://localhost:8000/docs
+# 📊 Prometheus: http://localhost:9090
+# 📈 Grafana: http://localhost:3000 (admin/admin)
+# 🔍 Redis: localhost:6379
+# 🔎 Elasticsearch: http://localhost:9200
+# 📋 Kibana: http://localhost:5601
+# 🌍 Nginx: http://localhost:80
+
+# ===== ENVIRONMENT VARIABLES =====
+#
+# Create .env file with:
+# CRYPTON_SECRET_KEY=your-super-secret-key-here
+# GRAFANA_PASSWORD=your-grafana-password
+# ENVIRONMENT=production
+# LOG_LEVEL=info
+
+# ===== PRODUCTION CHECKLIST =====
+#
+# ✅ Change CRYPTON_SECRET_KEY
+# ✅ Change GRAFANA_PASSWORD
+# ✅ Configure SSL certificates in nginx/ssl/
+# ✅ Update nginx.conf for your domain
+# ✅ Set proper resource limits
+# ✅ Configure backup strategy for volumes
+# ✅ Set up log rotation
+# ✅ Configure firewall rules
+# ✅ Enable monitoring alerts
+# ✅ Test health checks

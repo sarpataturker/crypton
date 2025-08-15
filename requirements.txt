@@ -1,43 +1,204 @@
-# CRYPTON - Ultimate Multi-Algorithm Requirements
-# ==============================================
-# ALL packages below are REQUIRED and ACTIVE for full 43 algorithm support
+# ===== CRYPTON Terminal App Requirements =====
+# Enhanced dependencies for terminal application with smart installer
+# Version: 5.2.0
 
 # ===== CORE CRYPTOGRAPHIC LIBRARIES (REQUIRED) =====
-cryptography>=41.0.0
-bcrypt>=4.0.0
-argon2-cffi>=23.0.0
-pynacl>=1.5.0
-passlib>=1.7.4
+cryptography>=41.0.0          # Main cryptographic operations
+bcrypt>=4.0.0                  # Password hashing with bcrypt
+argon2-cffi>=23.0.0           # Argon2 password hashing
+pynacl>=1.5.0                 # NaCl cryptographic library
+passlib[bcrypt,argon2]>=1.7.4 # Password hashing utilities
 
-# ===== USER INTERFACE (REQUIRED) =====
-colorama>=0.4.6
+# ===== TERMINAL UI & USER EXPERIENCE =====
+colorama>=0.4.6               # Cross-platform colored output
 
-# ===== ALGORITHM BREAKDOWN =====
-# cryptography: Fernet, AES variants, ChaCha20, RSA, ECDH, Ed25519, X25519, DSA, hashes
-# bcrypt: bcrypt password hashing
-# argon2-cffi: Argon2id, Argon2i, Argon2d
-# pynacl: Salsa20, XChaCha20, NaCl primitives  
-# passlib: SHA-512 crypt, additional password methods
-# colorama: Cross-platform terminal colors
-# Built-in Python: hashlib, base64, binascii, string (for classical ciphers)
+# ===== SYSTEM & PLATFORM SUPPORT =====
+# The following are handled by smart installer and typically included with Python:
+# os, sys, json, pathlib, datetime, subprocess, threading, signal, shutil
 
-# ===== DEVELOPMENT DEPENDENCIES (OPTIONAL FOR DEVELOPERS) =====
-# These are ONLY for people who want to MODIFY/IMPROVE the CRYPTON code
-# Normal users DON'T need these - they're for:
+# ===== OPTIONAL ENHANCEMENTS =====
+# Uncomment these for enhanced features:
+
+# Performance monitoring:
+# psutil>=5.9.0               # System and process utilities
+
+# Enhanced terminal features:
+# rich>=13.7.0                # Rich text and beautiful formatting
+# click>=8.1.0                # Command line interface creation
+
+# Network features for API integration:
+# requests>=2.31.0            # HTTP library for API calls
+# httpx>=0.25.0              # Modern async HTTP client
+
+# Configuration management:
+# python-dotenv>=1.0.0        # .env file support
+# pyyaml>=6.0.1              # YAML configuration support
+
+# ===== DEVELOPMENT TOOLS (OPTIONAL) =====
+# Uncomment for development work:
+
+# Testing:
+# pytest>=7.4.0              # Testing framework
+# pytest-cov>=4.1.0          # Coverage testing
+
+# Code quality:
+# black>=23.9.0               # Code formatting
+# flake8>=6.1.0              # Code linting
+# mypy>=1.7.0                # Type checking
+
+# ===== MOBILE/API INTEGRATION DEPENDENCIES =====
+# For users who want to use both terminal and API features:
+# See api_requirements.txt for full API server dependencies
+
+# ===== INSTALLATION NOTES =====
 #
-# pytest>=7.0.0           # 🧪 TESTING: Run automated tests to verify code works
-# black>=23.0.0           # 🎨 FORMATTING: Auto-format code to look clean  
-# flake8>=6.0.0           # 🔍 LINTING: Check code quality and find bugs
-# mypy>=1.0.0             # 📝 TYPE CHECKING: Verify data types are correct
-# coverage>=7.0.0         # 📊 TEST COVERAGE: See how much code is tested
-# pre-commit>=3.0.0       # 🚀 GIT HOOKS: Auto-run checks before commits
+# AUTOMATIC INSTALLATION (macOS):
+# Just run: python3 main.py
+# The smart installer will automatically detect and use pip3/python3
 #
-# TO USE DEVELOPMENT TOOLS:
-# 1. Uncomment the lines above (remove #)
-# 2. Run: pip install -r requirements.txt
-# 3. Now you can contribute code improvements to CRYPTON!
+# MANUAL INSTALLATION (macOS):
+# pip3 install -r requirements.txt
+#
+# HOMEBREW PYTHON (recommended for macOS):
+# brew install python3
+# pip3 install -r requirements.txt
+#
+# SYSTEM PYTHON (macOS):
+# /usr/bin/python3 -m pip install --user -r requirements.txt
+#
+# FOR DEVELOPERS:
+# 1. Uncomment development tools above
+# 2. pip3 install -r requirements.txt
+# 3. Pre-commit hooks: pre-commit install
+#
+# FOR API FEATURES:
+# pip3 install -r api_requirements.txt
+#
+# VIRTUAL ENVIRONMENT (RECOMMENDED for macOS):
+# python3 -m venv crypton-env
+# source crypton-env/bin/activate
+# pip install -r requirements.txt  # pip works inside venv
 
-# ===== FOR NORMAL USERS =====
-# Just run: python main.py
-# The 6 packages above will auto-install and you'll have all 43 algorithms!
-# You DON'T need the development tools unless you want to modify CRYPTON's code.
+# ===== ALGORITHM BREAKDOWN BY PACKAGE =====
+#
+# cryptography (26 algorithms):
+# - Fernet, AES variants (GCM/CBC/CTR/OFB)
+# - ChaCha20-Poly1305, ChaCha20
+# - RSA-2048/4096, ECDH (P-256/384/521)
+# - Ed25519, X25519, DSA
+# - SHA-256/512, SHA3-256/512, BLAKE2b/s
+# - 3DES, PBKDF2, scrypt
+#
+# bcrypt (1 algorithm):
+# - bcrypt password hashing
+#
+# argon2-cffi (3 algorithms):
+# - Argon2id, Argon2i, Argon2d
+#
+# pynacl (3 algorithms):
+# - Salsa20, XChaCha20, NaCl box
+#
+# passlib (1 algorithm):
+# - SHA-512 crypt
+#
+# Built-in Python (9 algorithms):
+# - Base64, Base32, Hexadecimal
+# - ROT13, Caesar, Vigenère, Atbash, Rail Fence
+# - MD5, SHA-1 (via hashlib)
+#
+# TOTAL: 43 ALGORITHMS ✅
+
+# ===== SYSTEM REQUIREMENTS =====
+#
+# Python: 3.8+ (recommended: 3.11+)
+# OS: Windows, macOS, Linux
+# RAM: 256MB minimum, 512MB recommended
+# Storage: 50MB for packages
+# Terminal: Any modern terminal with ANSI color support
+#
+# PLATFORM-SPECIFIC NOTES:
+#
+# Windows:
+# - Colorama enables ANSI colors on older Windows versions
+# - Windows Terminal recommended for best experience
+#
+# macOS:
+# - All features work out of the box
+# - Terminal.app or iTerm2 recommended
+#
+# Linux:
+# - All features work out of the box
+# - Any terminal emulator with 256-color support
+#
+# Termux (Android):
+# - All features supported
+# - Install with: pkg install python && pip install -r requirements.txt
+
+# ===== SMART INSTALLER FEATURES =====
+#
+# ✅ Dependency caching (7-day cache)
+# ✅ Version checking and updates
+# ✅ Failed installation tracking
+# ✅ Cross-platform pip detection
+# ✅ Network failure handling
+# ✅ Cache invalidation and refresh
+# ✅ Minimal output for cached dependencies
+# ✅ Automatic cache directory creation
+# ✅ JSON-based cache storage
+# ✅ Graceful degradation on cache errors
+
+# ===== TROUBLESHOOTING =====
+#
+# Package installation fails:
+# 1. Update pip: python -m pip install --upgrade pip
+# 2. Clear cache: rm -rf ~/.crypton/deps_cache.json
+# 3. Manual install: pip install package_name
+# 4. Check internet connection
+# 5. Try with --user flag: pip install --user package_name
+#
+# Import errors:
+# 1. Verify Python version: python --version
+# 2. Check package installation: pip list | grep package_name
+# 3. Reinstall packages: pip uninstall package_name && pip install package_name
+# 4. Use virtual environment to avoid conflicts
+#
+# Performance issues:
+# 1. Update to Python 3.11+ for better performance
+# 2. Use SSD storage for faster package loading
+# 3. Increase terminal buffer size for large outputs
+# 4. Close unnecessary background applications
+
+# ===== SECURITY CONSIDERATIONS =====
+#
+# ⚠️  IMPORTANT SECURITY NOTES:
+#
+# 1. Package Integrity:
+#    - All packages are from PyPI official repository
+#    - Cryptography package is regularly audited
+#    - Use pip with --require-hashes for production
+#
+# 2. Key Management:
+#    - Never commit .env files to version control
+#    - Use secure key generation (provided by CRYPTON)
+#    - Rotate keys regularly for sensitive applications
+#
+# 3. Algorithm Selection:
+#    - Prefer modern algorithms (AES-256-GCM, ChaCha20-Poly1305)
+#    - Avoid legacy algorithms (MD5, SHA-1) for security-critical applications
+#    - Use proper password hashing (bcrypt, Argon2) for password storage
+#
+# 4. Environment Security:
+#    - Keep Python and packages updated
+#    - Use virtual environments to isolate dependencies
+#    - Monitor security advisories for cryptographic packages
+
+# ===== VERSION COMPATIBILITY =====
+#
+# Python 3.8+: ✅ Fully supported
+# Python 3.9+: ✅ Recommended
+# Python 3.10+: ✅ Optimal performance
+# Python 3.11+: ✅ Best performance
+# Python 3.12+: ✅ Future-ready
+#
+# Package version constraints ensure compatibility across all supported Python versions.
+# Minimum versions are set to balance security, features, and compatibility.
