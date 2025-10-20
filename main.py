@@ -8,7 +8,7 @@ Modern Responsive Terminal UI with Docker Integration
 Author: @sarpataturker
 GitHub: https://github.com/sarpataturker/crypton
 License: MIT License
-Version: 5.2.0
+Version: 5.2.1
 """
 
 import os
@@ -278,7 +278,7 @@ class CRYPTON:
         self.menu = MenuSystem()
         self.key = None
         self.fernet = None
-        self.version = "5.2.0"
+        self.version = "5.2.1"
         self.current_algorithm = "fernet"
         
         # Algoritma kategorileri
@@ -360,7 +360,7 @@ class CRYPTON:
         if self.terminal.width < 80:
             # Compact banner for small terminals
             print(f"{Fore.CYAN}{Style.BRIGHT}")
-            print(self.terminal.center("🔐 CRYPTON Enhanced v5.2.0"))
+            print(self.terminal.center("🔐 CRYPTON Enhanced v5.2.1"))
             print(self.terminal.center("43+ Algorithms | Smart UI | Docker Ready"))
             print(f"{Style.RESET_ALL}")
         else:
@@ -378,7 +378,7 @@ class CRYPTON:
             for line in banner:
                 print(self.terminal.center(line))
             print()
-            print(self.terminal.center(f"🛡️  Enhanced Edition v{self.version} 🛡️"))
+            print(self.terminal.center(f"🛡️ Enhanced Edition v{self.version} 🛡️"))
             print(self.terminal.center("🔐 43+ Algorithms | Smart Navigation | Docker Ready 🔐"))
             print(self.terminal.center("⚡ Ultimate Multi-Algorithm Encryption Suite ⚡"))
             print(self.terminal.center("Created by @sarpataturker with ❤️"))
@@ -400,7 +400,7 @@ class CRYPTON:
             f"⚡ Performance: {Fore.GREEN}Optimized{Style.RESET_ALL}"
         ]
         
-        box = self.terminal.box(status_info, "🛡️  CRYPTON STATUS DASHBOARD")
+        box = self.terminal.box(status_info, "🛡️ CRYPTON STATUS DASHBOARD")
         for line in box:
             print(line)
     
@@ -419,7 +419,7 @@ class CRYPTON:
         return pages
     
     def show_paginated_menu(self, items, title, page_size=10):
-        """Sayfalanmış menü göster"""
+        """Sayfalalanmış menü göster"""
         if len(items) <= page_size:
             # Sayfalama gerekmiyor
             menu_items = [f"{i+1}. {item}" for i, item in enumerate(items)]
@@ -484,7 +484,7 @@ class CRYPTON:
             "7. 📊 Browse Algorithm Library",
             "8. 💾 Save Key to Environment",
             "9. 🐳 Docker API Management",
-            "0. ⌨️  Exit CRYPTON Suite"
+            "0. ⌨️ Exit CRYPTON Suite"
         ]
         
         box = self.terminal.box(menu_items, "🚀 CRYPTON MAIN CONTROL PANEL")
@@ -504,7 +504,7 @@ class CRYPTON:
                            for i, cat in enumerate(categories)]
             category_menu.append("0. 🔙 Back to Main Control Panel")
             
-            box = self.terminal.box(category_menu, "🛡️  ALGORITHM CATEGORY SELECTION")
+            box = self.terminal.box(category_menu, "🛡️ ALGORITHM CATEGORY SELECTION")
             for line in box:
                 print(line)
             
@@ -517,7 +517,7 @@ class CRYPTON:
                 selected_category = categories[choice - 1]
                 algorithms = self.categories[selected_category]
                 
-                # Algoritma seçimi (sayfalanmış)
+                # Algoritma seçimi (sayfalalanmış)
                 selected_algo = self.show_paginated_menu(
                     algorithms, 
                     f"{selected_category.upper()}"
@@ -609,7 +609,7 @@ class CRYPTON:
             
             result_info = [
                 f"🔧 Algorithm: {self.current_algorithm.upper()}",
-                f"🔑 Status: {key_display}",
+                f"🔒 Status: {key_display}",
                 f"🛡️ Security Level: {security_level}",
                 f"📂 Category: {self.get_algorithm_category()}",
                 f"⏰ Generated: {datetime.now().strftime('%H:%M:%S')}",
@@ -623,7 +623,7 @@ class CRYPTON:
         except Exception as e:
             print(f"{Fore.RED}❌ Key generation failed: {e}{Style.RESET_ALL}")
         
-        input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
     
     def load_key_from_env(self):
         """TAM ÇALIŞAN .env dosyasından key yükleme"""
@@ -641,7 +641,7 @@ class CRYPTON:
                     return self.save_key_to_env()
                 else:
                     print(f"{Fore.YELLOW}💡 Operation cancelled.{Style.RESET_ALL}")
-                    input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+                    input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
                     return False
             
             # Read and parse .env file
@@ -690,7 +690,7 @@ class CRYPTON:
                         if not self.generate_key():
                             return False
                     return self.save_key_to_env()
-                input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+                input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
                 return False
             
             # Display available keys
@@ -698,7 +698,7 @@ class CRYPTON:
                 section, key_name, key_value = matching_keys[0]
                 self._load_key_value(key_value)
                 print(f"{Fore.GREEN}✅ Loaded {self.current_algorithm.upper()} key: {key_name}{Style.RESET_ALL}")
-                input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+                input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
                 return True
             else:
                 print(f"\n{Style.BRIGHT}{Fore.GREEN}🔑 Multiple {self.current_algorithm.upper()} keys found:{Style.RESET_ALL}")
@@ -724,7 +724,7 @@ class CRYPTON:
                         section, key_name, key_value = matching_keys[choice_idx]
                         self._load_key_value(key_value)
                         print(f"{Fore.GREEN}✅ Loaded {self.current_algorithm.upper()} key: {key_name}{Style.RESET_ALL}")
-                        input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+                        input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
                         return True
                     else:
                         print(f"{Fore.RED}❌ Invalid selection! Please enter 1-{back_option}{Style.RESET_ALL}")
@@ -735,7 +735,7 @@ class CRYPTON:
             
         except Exception as e:
             print(f"{Fore.RED}❌ Failed to load key from .env: {e}{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return False
     
     def _load_key_value(self, key_value):
@@ -768,7 +768,7 @@ class CRYPTON:
         """TAM ÇALIŞAN .env dosyasına key kaydetme"""
         if not self.key:
             print(f"{Fore.RED}❌ No encryption key available to save!{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return False
         
         env_path = ".env"
@@ -776,7 +776,7 @@ class CRYPTON:
         try:
             # Get key name from user
             suggested_name = f"{self.current_algorithm.upper()}_KEY"
-            key_name = input(f"{Style.BRIGHT}{Fore.YELLOW}🏷️  Enter key name (press Enter for '{suggested_name}'): {Style.RESET_ALL}").strip()
+            key_name = input(f"{Style.BRIGHT}{Fore.YELLOW}🏷️ Enter key name (press Enter for '{suggested_name}'): {Style.RESET_ALL}").strip()
             if not key_name:
                 key_name = suggested_name
             
@@ -825,12 +825,12 @@ class CRYPTON:
             
             print(f"{Fore.GREEN}✅ Key '{key_name}' saved to .env under #{section_name.upper()} section!{Style.RESET_ALL}")
             print(f"{Fore.CYAN}💡 File location: {os.path.abspath(env_path)}{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return True
             
         except Exception as e:
             print(f"{Fore.RED}❌ Failed to save key to .env: {e}{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return False
     
     def _convert_key_to_string(self):
@@ -945,7 +945,7 @@ class CRYPTON:
             for line in box:
                 print(line)
             
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return
         
         try:
@@ -1057,14 +1057,14 @@ class CRYPTON:
             for line in box:
                 print(line)
         
-        input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
     
     def encrypt_text(self):
         """TAM ÇALIŞAN metin şifreleme"""
         if not self.key and not any(x in self.current_algorithm for x in ["bcrypt", "argon2", "scrypt", "pbkdf2", "sha", "blake2", "md5", "base64", "base32", "hex", "rot13", "caesar", "vigenere", "atbash", "rail_fence"]):
             print(f"{Fore.RED}🚨 SECURITY ALERT: No encryption key detected!{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}💡 Please generate a key first (Option 2){Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return
         
         self.terminal.clear()
@@ -1076,7 +1076,7 @@ class CRYPTON:
         
         if not text:
             print(f"{Fore.RED}❌ Cannot encrypt empty data{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return
         
         try:
@@ -1089,7 +1089,6 @@ class CRYPTON:
                 result_info = [
                     f"🔧 Algorithm: {self.current_algorithm.upper()}",
                     f"📝 Original Data: {text}",
-                    f"🔒 Encrypted Output: {encrypted}",
                     f"📏 Size Change: {len(text)} → {len(encrypted)} bytes",
                     f"🛡️ Security: {security_note}",
                     f"⏰ Encrypted At: {datetime.now().strftime('%H:%M:%S')}",
@@ -1100,10 +1099,14 @@ class CRYPTON:
                 for line in box:
                     print(line)
                 
+                # Full encrypted output for easy copying
+                print(f"\n{Style.BRIGHT}{Fore.GREEN}🔒 ENCRYPTED OUTPUT (ready to copy):{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}{encrypted}{Style.RESET_ALL}")
+                
         except Exception as e:
             print(f"{Fore.RED}❌ Encryption failed: {e}{Style.RESET_ALL}")
         
-        input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
     
     def _perform_encryption(self, text):
         """Perform encryption based on current algorithm"""
@@ -1222,7 +1225,7 @@ class CRYPTON:
         elif self.current_algorithm in ["caesar", "vigenere", "atbash"]:
             return "📚 Classical cipher (educational)"
         elif "sha" in self.current_algorithm or self.current_algorithm in ["md5", "blake2b", "blake2s"]:
-            return "🔐 One-way hash function"
+            return "🔍 One-way hash function"
         elif self.current_algorithm == "bcrypt":
             return "🛡️ Adaptive password hashing"
         else:
@@ -1233,7 +1236,7 @@ class CRYPTON:
         if not self.key and self.current_algorithm not in ["base64", "hex", "rot13", "atbash"]:
             print(f"{Fore.RED}🚨 SECURITY ALERT: No decryption key detected!{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}💡 Please generate a key first (Option 2){Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return
         
         self.terminal.clear()
@@ -1242,8 +1245,8 @@ class CRYPTON:
         
         # Hash function kontrolü
         if self.current_algorithm in ["sha256", "sha512", "sha3_256", "sha3_512", "blake2b", "blake2s", "md5", "sha1"]:
-            print(f"{Style.BRIGHT}{Fore.YELLOW}⚠️  {self.current_algorithm.upper()} is a one-way hash function - decryption not possible!{Style.RESET_ALL}")
-            input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+            print(f"{Style.BRIGHT}{Fore.YELLOW}⚠️ {self.current_algorithm.upper()} is a one-way hash function - decryption not possible!{Style.RESET_ALL}")
+            input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
             return
         
         encrypted_text = input(f"\n{Fore.WHITE}🔒 Enter encrypted data to decrypt: {Style.RESET_ALL}")
@@ -1285,20 +1288,20 @@ class CRYPTON:
             print(f"{Fore.RED}❌ Decryption failed: {e}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}💡 Check if the encrypted data and key are correct{Style.RESET_ALL}")
         
-        input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+        input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
     
     def view_algorithms(self):
         """Profesyonel algoritma kütüphanesi"""
         self.terminal.clear()
         
-        print(f"{Style.BRIGHT}{Fore.GREEN}🏛️  CRYPTON ALGORITHM LIBRARY{Style.RESET_ALL}")
+        print(f"{Style.BRIGHT}{Fore.GREEN}🏛️ CRYPTON ALGORITHM LIBRARY{Style.RESET_ALL}")
         print(f"{Fore.CYAN}⚡ Complete collection of 43+ encryption algorithms{Style.RESET_ALL}\n")
         
         for category, algorithms in self.categories.items():
             # Kategori ikonları
             icons = {
-                "Symmetric Encryption": "🔒",
-                "Asymmetric Encryption": "🔐", 
+                "Symmetric Encryption": "🔐",
+                "Asymmetric Encryption": "🔏", 
                 "Password Hashing": "🛡️",
                 "Hash Functions": "⚡",
                 "Encoding & Classical": "📚"
@@ -1323,7 +1326,7 @@ class CRYPTON:
             f"📊 Total Algorithms: {Fore.GREEN}{total_algos}{Style.RESET_ALL}",
             f"📂 Categories: {Fore.GREEN}{len(self.categories)}{Style.RESET_ALL}",
             f"⭐ Current Selection: {Fore.YELLOW}{self.current_algorithm.upper()}{Style.RESET_ALL}",
-            f"🔑 Key Status: {Fore.GREEN if self.key else Fore.RED}{'✓ Active' if self.key else '✗ Inactive'}{Style.RESET_ALL}",
+            f"🔒 Key Status: {Fore.GREEN if self.key else Fore.RED}{'✓ Active' if self.key else '✗ Inactive'}{Style.RESET_ALL}",
             f"🛡️ Security Level: {Fore.GREEN}Enterprise Grade{Style.RESET_ALL}"
         ]
         
@@ -1331,7 +1334,7 @@ class CRYPTON:
         for line in box:
             print(line)
         
-        input(f"\n{Fore.GREEN}📥 Press Enter to return to main menu...{Style.RESET_ALL}")
+        input(f"\n{Fore.GREEN}🔥 Press Enter to return to main menu...{Style.RESET_ALL}")
     
     def docker_manager(self):
         """Profesyonel Docker yönetimi"""
@@ -1357,11 +1360,11 @@ class CRYPTON:
                 print(f"\n{Fore.RED}🚨 Docker Engine Not Detected{Style.RESET_ALL}")
                 
                 guide_info = self.docker.show_docker_guide()
-                box = self.terminal.box(guide_info, "🛠️  DOCKER INSTALLATION GUIDE")
+                box = self.terminal.box(guide_info, "🛠️ DOCKER INSTALLATION GUIDE")
                 for line in box:
                     print(line)
                 
-                input(f"\n{Fore.GREEN}📥 Press Enter to return to main menu...{Style.RESET_ALL}")
+                input(f"\n{Fore.GREEN}🔥 Press Enter to return to main menu...{Style.RESET_ALL}")
                 return
             
             menu_items = [
@@ -1413,7 +1416,7 @@ class CRYPTON:
                     print(f"{Fore.RED}❌ Could not retrieve logs{Style.RESET_ALL}")
             
             if choice != 0:
-                input(f"\n{Fore.GREEN}📥 Press Enter to continue...{Style.RESET_ALL}")
+                input(f"\n{Fore.GREEN}🔥 Press Enter to continue...{Style.RESET_ALL}")
     
     def _get_timestamp(self):
         """Get current timestamp"""
@@ -1429,14 +1432,14 @@ class CRYPTON:
                 print(f"\n{Style.BRIGHT}{Fore.CYAN}")
                 print("╔══════════════════════════════════════════════════╗")
                 print("║                                                  ║")
-                print("║  🛡️  Thank you for using CRYPTON Enhanced!     ║")
+                print("║  🛡️ Thank you for using CRYPTON Enhanced!     ║")
                 print("║                                                  ║")
                 print("║     🔐 Your data security is our priority       ║")
                 print("║     🚀 43+ algorithms at your fingertips        ║")
                 print("║     ⚡ Stay secure, stay protected!             ║")
                 print("║                                                  ║")
                 print("║           Created by @sarpataturker              ║")
-                print("║              with ❤️  and dedication             ║")
+                print("║              with ❤️ and dedication             ║")
                 print("║                                                  ║")
                 print("╚══════════════════════════════════════════════════╝")
                 print(f"{Style.RESET_ALL}\n")
